@@ -16,11 +16,14 @@ const main = async () => {
   app.get("/", (req, res) => {
     res.sendFile(__dirname + "/pages/index.html");
   });
-  app.use(express.static("public"));
-  io.on("connection", (socket) => {
-    console.log("Someone connected!");
-    socket.emit("welcome", "Wolcome!!!!");
+  app.get("/lobbies/:lobbyId", (req, res) => {
+    res.sendFile(__dirname + "/pages/insideLobby.html");
   });
+  app.get("/lobbies", (req, res) => {
+    res.sendFile(__dirname + "/pages/lobbies.html")
+  });
+  app.use(express.static("public"));
+  io.of("/lobbies").on("connection", (socket) => lobbySocket(socket, io));
 }
 
 module.exports = main;

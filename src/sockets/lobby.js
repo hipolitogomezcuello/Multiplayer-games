@@ -1,52 +1,50 @@
 const lobbyService = require("../services/lobby");
 const playerService = require("../services/player");
 
-module.exports = (socket) => {
-  socket.on("connection", () => {
-    socket.join("lobbies");
-  });
-
+module.exports = (socket, io) => {
   socket.on("find all", () => {
-    socket.emit("find all", lobbyService.findAll());
+    socket.join("lobbies");
+    socket.emit("find all", { lobbies: lobbyService.findAll() });
   });
 
   socket.on("join lobby", data => {
-    lobbyService.joinPlayer(data.player, data.lobbyId);
     socket.leave("lobbies");
-    socket.to(data.lobbyId).emit("player joined", data.player);
-    socket.emit("join lobby", lobby.findById(data.lobbyId));
-    socket.join(data.lobbyId);
+    lobbyService.joinPlayer(data.player, data.lobbyId);
+    socket.to(data.lobbyId).emit("player joined", { player: data.player });
+    socket.emit("join lobby", { lobby: lobbyService.findById(data.lobbyId) });
   });
 
-  socket.on("create player", (username) => {
-    socket.emit("create player", playerService.create(username))
+  socket.on("create player", (data) => {
+    console.log(`Created Player: ${data.username}`);
+    socket.emit("create player", { player: playerService.create(data.username) });
   });
 
   socket.on("create lobby", (data) => {
-    const lobby = service.create(data.name, data.host);
-    socket.to("lobbies").emit("new lobby", lobby);
+    const lobby = lobbyService.create(data.name, data.host);
+    const rooms = socket.rooms;
+    socket.to("lobbies").emit("new lobby", { lobby });
+    console.log(`Created Lobby: ${lobby.name}`);
     socket.leave("lobbies");
     socket.join(lobby.id);
-    socket.emit("create lobby", lobby);
+    socket.emit("create lobby", { lobby });
   });
 
-  socket.on("find players of lobby", lobbyId => {
-    socket.emit("find players of lobby", lobbyService.findById(lobbyId).players);
+  socket.on("find players of lobby", (data) => {
+    socket.join(data.lobbyId);
+    const lobby = lobbyService.findById(data.lobbyId);
+    socket.emit("find players of lobby", { players: lobby.players });
   });
 
-  socket.on("leave lobby", data => {
-    lobbyService.removePlayer(data.lobbyId, data.playerId);
-    socket.leave(data.lobbyId);
-    socket.join("lobbies");
+  socket.on("leave lobby", ({ lobbyId, playerId }) => {
+    lobbyService.removePlayer(lobbyId, playerId);
+    socket.to(lobbyId).emit("player left lobby", { playerId });
+    socket.leave(lobbyId);
   });
 
-  socket.on("delete lobby", lobbyId => {
-    socket.broadcast.emit("lobby deleted", lobbyId);
-    socket.to(lobbyId).emit("lobby deleted");
-    socket.clients(lobbyId).forEach(client => {
-      client.leave(lobbyId);
-      client.join("lobbies");
-    });
+  socket.on("delete lobby", ({ lobbyId }) => {
     lobbyService.delete(lobbyId);
+    socket.to("lobbies").emit("lobby deleted", { lobbyId });
+    socket.to(lobbyId).emit("lobby deleted", { lobbyId });
+    socket.emit("lobby deleted", { lobbyId });
   });
 }

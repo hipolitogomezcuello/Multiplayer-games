@@ -7,7 +7,7 @@ module.exports = {
     return Object.values(lobbies);
   },
   joinPlayer: (player, lobbyId) => {
-    lobbies[lobbyId].joinUser(user);
+    lobbies[lobbyId].players[player.id] = player;
   },
   findById: (id) => {
     return lobbies[id];

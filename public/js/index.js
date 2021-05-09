@@ -1,7 +1,12 @@
-var socket = io();
+const socket = io("/lobbies");
 
-socket.on("welcome", function (data) {
-  console.log("welcome");
-  var div = document.getElementById("welcome");
-  div.innerHTML += "<h3>" + data + "</h3><br>";
+const createPlayer = () => {
+  const username = document.getElementById("username").value;
+  socket.emit("create player", { username });
+  return false;
+}
+
+socket.on("create player", (data) => {
+  localStorage.setItem("player", JSON.stringify(data.player));
+  window.location.href = "/lobbies";
 });
