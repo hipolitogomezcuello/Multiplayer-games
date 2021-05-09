@@ -47,4 +47,11 @@ module.exports = (socket, io) => {
     socket.to(lobbyId).emit("lobby deleted", { lobbyId });
     socket.emit("lobby deleted", { lobbyId });
   });
+
+  socket.on("start game", ({ lobbyId }) => {
+    const lobby = lobbyService.findById(lobbyId);
+    socket.to("lobbies").emit("lobby deleted", { lobbyId });
+    lobbyService.delete(lobbyId);
+    
+  });
 }

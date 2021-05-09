@@ -7,6 +7,7 @@ document.getElementById("header").innerHTML = lobby.name;
 if (lobby.hostId === player.id) {
   imHost = true;
   document.getElementById("deleteLobbyButton").style.display = "block";
+  document.getElementById("startGameButton").style.display = "block";
 } else {
   document.getElementById("leaveLobbyButton").style.display = "block";
 }
@@ -53,3 +54,7 @@ socket.on("lobby deleted", () => {
   localStorage.removeItem("lobby");
   window.location.href = "/lobbies";
 });
+
+const startGame = () => {
+  socket.emit("start game", { lobbyId: lobby.id });
+}
