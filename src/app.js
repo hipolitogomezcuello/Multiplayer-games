@@ -20,10 +20,14 @@ const main = async () => {
     res.sendFile(__dirname + "/pages/insideLobby.html");
   });
   app.get("/lobbies", (req, res) => {
-    res.sendFile(__dirname + "/pages/lobbies.html")
+    res.sendFile(__dirname + "/pages/lobbies.html");
+  });
+  app.get("/games/:gameTitle/:gameId", (req, res) => {
+    res.sendFile(__dirname + "/pages/games/tictactoe.html");
   });
   app.use(express.static("public"));
   io.of("/lobbies").on("connection", (socket) => lobbySocket(socket, io));
+  console.log(`Listening on http://localhost:${port}`);
 }
 
 module.exports = main;

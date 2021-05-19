@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const Lobby = require("../domain/Lobby");
 
 const lobbies = {}
 
@@ -7,29 +7,22 @@ module.exports = {
     return Object.values(lobbies);
   },
   joinPlayer: (player, lobbyId) => {
-    lobbies[lobbyId].players[player.id] = player;
+    lobbies[lobbyId].addPlayer(player);
   },
   findById: (id) => {
     return lobbies[id];
   },
   create: (name, host) => {
-    const players = {}
-    players[host.id] = host;
-    const id = uuidv4();
-    lobbies[id] = {
-      name,
-      id,
-      hostId: host.id,
-      players,
-    }
-    return lobbies[id];
+    const lobby = new Lobby(name, host);
+    lobbies[lobby.id] = lobby;
+    return lobby;
   },
   removePlayer: (lobbyId, playerId) => {
     const lobby = lobbies[lobbyId];
     if (lobby.hostId === playerId) {
       throw new Error("Cannot remove host from lobby, try deleting the lobby instead.");
     }
-    delete lobby.players[playerId];
+    lobby.removePlayer(playerId);
   },
   delete: (id) => {
     delete lobbies[id];

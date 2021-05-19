@@ -1,5 +1,6 @@
 const lobbyService = require("../services/lobby");
 const playerService = require("../services/player");
+const gameService = require("../services/game");
 
 module.exports = (socket, io) => {
   socket.on("find all", () => {
@@ -48,10 +49,10 @@ module.exports = (socket, io) => {
     socket.emit("lobby deleted", { lobbyId });
   });
 
-  socket.on("start game", ({ lobbyId }) => {
+  socket.on("start game", ({ lobbyId, selectedGame }) => {
     const lobby = lobbyService.findById(lobbyId);
-    socket.to("lobbies").emit("lobby deleted", { lobbyId });
-    lobbyService.delete(lobbyId);
-    
+    const game = gameService.create(lobby, selectedGame);
+    socket.to(lobbyId).emit("start game", { game });
+    socket.emit("start game", { game });
   });
 }

@@ -56,5 +56,11 @@ socket.on("lobby deleted", () => {
 });
 
 const startGame = () => {
-  socket.emit("start game", { lobbyId: lobby.id });
+  const selectedGame = document.getElementById("gameTitle").value;
+  socket.emit("start game", { lobbyId: lobby.id, selectedGame });
 }
+
+socket.on("start game", ({ game }) => {
+  localStorage.setItem("game", JSON.stringify(game));
+  window.location.href = `/games/${game.name}/${game.id}`;
+});
