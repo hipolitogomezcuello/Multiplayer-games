@@ -3,7 +3,7 @@ const { Server } = require("socket.io");
 const express = require("express");
 const lobbySocket = require("./sockets/lobby");
 const tictactoeSocket = require("./sockets/tictactoe");
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 const main = async () => {
   const app = express();
