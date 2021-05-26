@@ -150,7 +150,6 @@ export default () => {
 
   return <>
     <h1>TIC TAC TOE</h1>
-    <button onClick={() => console.log(`PlayerId: ${player.id}. CurrentPlayerId: ${currentTurnPlayerId}`)}>DEV TOOLS</button>
     {map ? 
       <div style={styles.column}>
         <div style={styles.row}>
