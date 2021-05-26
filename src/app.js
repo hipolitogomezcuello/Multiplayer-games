@@ -2,6 +2,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const express = require("express");
 const lobbySocket = require("./sockets/lobby");
+const tictactoeSocket = require("./sockets/tictactoe");
 const port = 8080;
 
 const main = async () => {
@@ -26,7 +27,8 @@ const main = async () => {
     res.sendFile(__dirname + "/pages/games/tictactoe.html");
   });
   app.use(express.static("public"));
-  io.of("/lobbies").on("connection", (socket) => lobbySocket(socket, io));
+  io.of("/lobbies").on("connection", (socket) => lobbySocket(socket));
+  io.of("/games/tictactoe").on("connection", (socket) => tictactoeSocket(socket));
   console.log(`Listening on http://localhost:${port}`);
 }
 

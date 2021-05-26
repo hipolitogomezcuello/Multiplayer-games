@@ -13,6 +13,6 @@ module.exports = {
     }
     games[game.id] = game;
     return game;
-  }
-  
+  },
+  findById: (id) => games[id],
 }

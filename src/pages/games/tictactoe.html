@@ -7,7 +7,7 @@
     </style>
   </head>
   <body>
-    <div id="main_container">
+    <div id="root">
 
     </div>
     <script
@@ -15,13 +15,6 @@
       integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
       crossorigin="anonymous"
     ></script>
-    <!-- Load React. -->
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <!-- Load our React component. -->
-    <script type="text/jsx" src="/js/games/tictactoe.js"></script>
-    <script>
-      ReactDOM.render(<Tictactoe />, document.querySelector("#main_container"));
-    </script>
+    <script src="/js/bundle.js"></script>
   </body>
 </html>

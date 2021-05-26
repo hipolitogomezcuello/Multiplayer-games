@@ -2,7 +2,7 @@ const lobbyService = require("../services/lobby");
 const playerService = require("../services/player");
 const gameService = require("../services/game");
 
-module.exports = (socket, io) => {
+module.exports = (socket) => {
   socket.on("find all", () => {
     socket.join("lobbies");
     socket.emit("find all", { lobbies: lobbyService.findAll() });
@@ -22,7 +22,6 @@ module.exports = (socket, io) => {
 
   socket.on("create lobby", (data) => {
     const lobby = lobbyService.create(data.name, data.host);
-    const rooms = socket.rooms;
     socket.to("lobbies").emit("new lobby", { lobby });
     console.log(`Created Lobby: ${lobby.name}`);
     socket.leave("lobbies");
