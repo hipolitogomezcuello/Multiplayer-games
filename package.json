@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "react-dev": "webpack --watch",
-    "build": "webpack --mode production",
+    "react-build": "webpack --mode production",
     "start": "node index.js"
   },
   "author": "Hipólito Gomez Cuello",
@@ -29,5 +29,8 @@
     "nodemon": "^2.0.7",
     "nodemon-webpack-plugin": "^4.5.2",
     "webpack": "^5.37.1"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
