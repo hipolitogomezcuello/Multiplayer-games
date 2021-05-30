@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import game from '../../../services/game';
+import useStateRef from "../../../utils/useStateRef";
 import Cell from './Cell';
 
 const styles = {
@@ -59,13 +59,6 @@ const styles = {
     },
   },
   
-}
-
-const useStateRef = (initialValue) => {
-  const [value, setValue] = useState(initialValue);
-  const valueRef = useRef(value);
-  valueRef.current = value;
-  return [value, setValue, valueRef];
 }
 
 export default () => {

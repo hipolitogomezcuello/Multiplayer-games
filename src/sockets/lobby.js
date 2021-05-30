@@ -8,11 +8,12 @@ module.exports = (socket) => {
     socket.emit("find all", { lobbies: lobbyService.findAll() });
   });
 
-  socket.on("join lobby", data => {
+  socket.on("join lobby", ({player, lobbyId}) => {
     socket.leave("lobbies");
-    lobbyService.joinPlayer(data.player, data.lobbyId);
-    socket.to(data.lobbyId).emit("player joined", { player: data.player });
-    socket.emit("join lobby", { lobby: lobbyService.findById(data.lobbyId) });
+    lobbyService.joinPlayer(player, lobbyId);
+    socket.to("lobbies").emit("player joined lobby", { player, lobbyId });
+    socket.to(lobbyId).emit("player joined", { player });
+    socket.emit("join lobby", { lobby: lobbyService.findById(lobbyId) });
   });
 
   socket.on("create player", (data) => {

@@ -6,13 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "react-dev": "webpack --watch",
+    "react-dev": "webpack --watch --mode development",
     "react-build": "webpack --mode production",
     "start": "node index.js"
   },
   "author": "Hipólito Gomez Cuello",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
     "express": "^4.17.1",
     "hookrouter": "^1.2.5",
     "react": "^17.0.2",
