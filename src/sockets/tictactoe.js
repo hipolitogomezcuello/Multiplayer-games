@@ -1,4 +1,5 @@
 const gameService = require("../services/game");
+const lobbyService = require("../services/lobby");
 const emitToWholeRoom = require("../utils/emitToWholeRoom");
 
 module.exports = (socket) => {
@@ -15,12 +16,22 @@ module.exports = (socket) => {
   socket.on("make a play", (data) => {
     const game = gameService.findById(data.gameId);
     game.makePlay(data.playerId, data.cell);
-    socket.to(data.gameId).emit("player made a play", { figure: game.players[data.playerId].figure, cell: data.cell, currentTurnPlayerId: game.currentTurnPlayerId });
+    socket
+      .to(data.gameId)
+      .emit("player made a play", {
+        figure: game.players[data.playerId].figure,
+        cell: data.cell,
+        currentTurnPlayerId: game.currentTurnPlayerId,
+      });
     if (game.winner) {
-      emitToWholeRoom(socket, data.gameId, "game ended", { result: { winner: game.winner } });
+      emitToWholeRoom(socket, data.gameId, "game ended", {
+        result: { winner: game.winner },
+      });
     }
     if (game.result && game.result.draw) {
-      emitToWholeRoom(socket, data.gameId, "game ended", { result: { draw: "draw"}});
+      emitToWholeRoom(socket, data.gameId, "game ended", {
+        result: { draw: "draw" },
+      });
     }
   });
 
@@ -31,7 +42,17 @@ module.exports = (socket) => {
       game.reset();
       emitToWholeRoom(socket, gameId, "play again", { game });
     } else {
-      emitToWholeRoom(socket, gameId, "player wants to play again", { playerId });
+      emitToWholeRoom(socket, gameId, "player wants to play again", {
+        playerId,
+      });
     }
   });
-}
+
+  socket.on("return to lobby", ({ gameId }) => {
+    gameService.deleteById(gameId);
+    const lobby = lobbyService.findById(gameId);
+    lobby.game = undefined;
+    lobby.gameInProgress = false;
+    emitToWholeRoom(socket, gameId, "return to lobby", { lobbyId: gameId });
+  });
+};

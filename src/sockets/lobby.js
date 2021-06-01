@@ -1,6 +1,7 @@
 const lobbyService = require("../services/lobby");
 const playerService = require("../services/player");
 const gameService = require("../services/game");
+const emitToWholeRoom = require("../utils/emitToWholeRoom");
 
 module.exports = (socket) => {
   socket.on("find all", () => {
@@ -8,8 +9,22 @@ module.exports = (socket) => {
     socket.emit("find all", { lobbies: lobbyService.findAll() });
   });
 
-  socket.on("join lobby", ({player, lobbyId}) => {
+  socket.on("join lobby", ({ player, lobbyId }) => {
     socket.leave("lobbies");
+    const lobby = lobbyService.findById(lobbyId);
+    if (
+      lobby.game &&
+      Object.keys(lobby.players).length >=
+        lobby.game.POSSIBLE_PLAYCOUNTS[
+          lobby.game.POSSIBLE_PLAYCOUNTS.length - 1
+        ]
+    ) {
+      const error = {
+        message: "Lobby is full",
+      };
+      socket.emit("join lobby", { error });
+      return;
+    }
     lobbyService.joinPlayer(player, lobbyId);
     socket.to("lobbies").emit("player joined lobby", { player, lobbyId });
     socket.to(lobbyId).emit("player joined", { player });
@@ -18,7 +33,9 @@ module.exports = (socket) => {
 
   socket.on("create player", (data) => {
     console.log(`Created Player: ${data.username}`);
-    socket.emit("create player", { player: playerService.create(data.username) });
+    socket.emit("create player", {
+      player: playerService.create(data.username),
+    });
   });
 
   socket.on("create lobby", (data) => {
@@ -49,10 +66,22 @@ module.exports = (socket) => {
     socket.emit("lobby deleted", { lobbyId });
   });
 
-  socket.on("start game", ({ lobbyId, selectedGame }) => {
+  socket.on("start game", ({ lobbyId }) => {
     const lobby = lobbyService.findById(lobbyId);
-    const game = gameService.create(lobby, selectedGame);
-    socket.to(lobbyId).emit("start game", { game });
-    socket.emit("start game", { game });
+    // const game = gameService.create(lobby, selectedGame);
+    // socket.to(lobbyId).emit("start game", { game });
+    // socket.emit("start game", { game });
+    emitToWholeRoom(socket, lobbyId, "start game", { game: lobby.game });
   });
-}
+
+  socket.on("game selected", ({ game: gameTitle, lobbyId }) => {
+    const lobby = lobbyService.findById(lobbyId);
+    if (lobby.game) {
+      gameService.deleteById(lobby.game.id);
+    }
+    const game = gameService.create(lobby, gameTitle);
+    lobby.game = game;
+    socket.to("lobbies").emit("game selected", { lobbyId, game });
+    emitToWholeRoom(socket, lobbyId, "game selected", { game });
+  });
+};

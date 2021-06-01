@@ -1,5 +1,5 @@
-const Tictactoe = require("../domain/games/Tictactoe")
-const games = {}
+const Tictactoe = require("../domain/games/Tictactoe");
+const games = {};
 
 module.exports = {
   create: (lobby, gameTitle) => {
@@ -15,4 +15,5 @@ module.exports = {
     return game;
   },
   findById: (id) => games[id],
-}
+  deleteById: (id) => delete games[id],
+};

@@ -18,7 +18,7 @@ const main = async () => {
     res.sendFile(__dirname + "/pages/index.html");
   });
   app.get("/lobbies/:lobbyId", (req, res) => {
-    res.sendFile(__dirname + "/pages/insideLobby.html");
+    res.sendFile(__dirname + "/pages/lobbies.html");
   });
   app.get("/lobbies", (req, res) => {
     res.sendFile(__dirname + "/pages/lobbies.html");

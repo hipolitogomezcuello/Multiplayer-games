@@ -7,13 +7,13 @@
   <body>
     <h1>Tic Tac Toe</h1>
     <form onsubmit="return createPlayer()">
-      <input id="username" type="text" placeholder="username...">
-      <input type="submit" value="Enter">
+      <input id="username" type="text" placeholder="username..." />
+      <input type="submit" value="Enter" />
     </form>
-    <button onClick="socket.emit('create player', { username: 'shikad' });
+    <!-- TODO<button onClick="socket.emit('create player', { username: 'shikad' });
     return false;">SHIKAD</button>
     <button onClick="socket.emit('create player', { username: 'guiso' });
-    return false;">GUISO</button>
+    return false;">GUISO</button> -->
     <script
       src="https://cdn.socket.io/3.1.3/socket.io.min.js"
       integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"

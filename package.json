@@ -10,6 +10,9 @@
     "react-build": "webpack --mode production",
     "start": "node index.js"
   },
+  "nodemonConfig": {
+    "ignore": ["src/js", "public"]
+  },
   "author": "Hipólito Gomez Cuello",
   "license": "ISC",
   "dependencies": {
