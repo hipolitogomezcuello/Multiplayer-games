@@ -108,15 +108,15 @@ export default () => {
   return (
     <>
       <h1>Lobbies</h1>
-      {/* TODO <Button variant="contained" color="secondary" onClick={devTools}>
+      <Button variant="contained" color="secondary" onClick={devTools}>
         DEV TOOLS
-      </Button> */}
+      </Button>
       <Button variant="contained" color="primary" onClick={createLobby}>
         Create Lobby
       </Button>
-      {/* TODO <Button variant="contained" color="secondary" onClick={createBased}>
+      <Button variant="contained" color="secondary" onClick={createBased}>
         BASED
-      </Button> */}
+      </Button>
       <TableContainer component={Paper} style={styles.tableContainer}>
         <Table>
           <TableHead>
@@ -159,4 +159,4 @@ export default () => {
       </TableContainer>
     </>
   );
-};
+}

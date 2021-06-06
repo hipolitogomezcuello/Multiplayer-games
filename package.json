@@ -11,7 +11,10 @@
     "start": "node index.js"
   },
   "nodemonConfig": {
-    "ignore": ["src/js", "public"]
+    "ignore": [
+      "src/js",
+      "public"
+    ]
   },
   "author": "Hipólito Gomez Cuello",
   "license": "ISC",
@@ -20,6 +23,7 @@
     "express": "^4.17.1",
     "hookrouter": "^1.2.5",
     "react": "^17.0.2",
+    "react-card-flip": "^1.1.1",
     "react-dom": "^17.0.2",
     "socket.io": "^4.0.1",
     "uuid": "^8.3.2",

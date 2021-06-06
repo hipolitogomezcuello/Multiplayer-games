@@ -13,9 +13,15 @@ module.exports = class Lobby {
 
   removePlayer = (id) => {
     delete this.players[id];
+    if (this.game) {
+      this.game.removePlayer(player);
+    }
   };
 
   addPlayer = (player) => {
     this.players[player.id] = player;
+    if (this.game) {
+      this.game.joinPlayer(player);
+    }
   };
 };

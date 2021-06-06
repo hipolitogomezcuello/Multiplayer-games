@@ -3,6 +3,7 @@ const { Server } = require("socket.io");
 const express = require("express");
 const lobbySocket = require("./sockets/lobby");
 const tictactoeSocket = require("./sockets/tictactoe");
+const adventurediceSocket = require("./sockets/adventuredice");
 const port = process.env.PORT || 8080;
 
 const main = async () => {
@@ -24,11 +25,12 @@ const main = async () => {
     res.sendFile(__dirname + "/pages/lobbies.html");
   });
   app.get("/games/:gameTitle/:gameId", (req, res) => {
-    res.sendFile(__dirname + "/pages/games/tictactoe.html");
+    res.sendFile(__dirname + `/pages/games/${req.params["gameTitle"]}.html`);
   });
   app.use(express.static("public"));
   io.of("/lobbies").on("connection", (socket) => lobbySocket(socket));
   io.of("/games/tictactoe").on("connection", (socket) => tictactoeSocket(socket));
+  io.of("/games/adventuredice").on("connection", (socket) => adventurediceSocket(socket));
   console.log(`Listening on http://localhost:${port}`);
 }
 
