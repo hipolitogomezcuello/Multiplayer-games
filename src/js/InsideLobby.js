@@ -93,9 +93,9 @@ const InsideLobby = () => {
 
   return (
     <>
-      <Button variant="contained" color="secondary" onClick={handleDevTools}>
+      {/* <Button variant="contained" color="secondary" onClick={handleDevTools}>
         DEV TOOLS
-      </Button>
+      </Button> */}
       {!imHost && (
         <Button
           variant="contained"
